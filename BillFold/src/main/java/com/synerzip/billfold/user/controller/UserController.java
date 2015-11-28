@@ -39,8 +39,7 @@ public class UserController {
 	    	try{
 	    	userDTO = userService.saveOrUpdateUserProfile(userDTO);
 	    	return userDTO;
-	    
-	    	}catch(Exception e){
+	       	}catch(Exception e){
 	    		e.printStackTrace();
 				throw new UserCreationException("Unable to create User Profile");
 	    	}   

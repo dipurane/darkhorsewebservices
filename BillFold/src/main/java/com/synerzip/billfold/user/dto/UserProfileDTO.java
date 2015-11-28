@@ -21,6 +21,29 @@ public class UserProfileDTO {
 	/** The is_verified. */
 	private Boolean is_verified;
 
+	
+	/** The phone number. */
+	private String phoneNumber;
+	
+	
+	/**
+	 * Gets the phone number.
+	 *
+	 * @return the phone number
+	 */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	/**
+	 * Sets the phone number.
+	 *
+	 * @param phoneNumber the new phone number
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	/**
 	 * Gets the id.
 	 *

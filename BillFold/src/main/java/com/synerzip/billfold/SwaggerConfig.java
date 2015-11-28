@@ -62,12 +62,12 @@ public class SwaggerConfig {
      */
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
-                "Soceana API Documentation",
-                "API Documentation for Soceana Restful Web Services for Corporations,Philanthropist,NPO and Volunteer scenarios",
+                "Billfold API Documentation",
+                "API Documentation for Billfold Restful Web Services for Peer to peer mobile and consumer to merchant scenarios",
                 "The APIs are currently in beta and only available through an invite",
                 "dipesh.rane@synerzip.com",
                 "Private Usage",
-                "http://www.soceana.com"
+                "http://www.billfold.com"
         );
         return apiInfo;
     }

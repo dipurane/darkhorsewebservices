@@ -6,5 +6,8 @@ import com.synerzip.billfold.user.entity.UserProfile;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
 
+	public UserProfile findByPhoneNumber(String phoneNumber);
 	
+	public UserProfile findById(Long id);
+		
 }
