@@ -20,8 +20,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
 @RestController
-@Api(basePath = "/apis/receiver/{userId}", value = "Receiver Management", description = "Receiver Management APIs", produces = "application/json", position=1)
-@RequestMapping(value = "/apis/receiver", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(basePath = "/apis/receiver/{userId}", value = "Receiver Management", description = "Receiver Management APIs", produces = "application/json", position=2)
+@RequestMapping(value = "/apis/receiver/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReceiverController {
 
 	@Autowired
@@ -32,20 +32,15 @@ public class ReceiverController {
 	    @ApiOperation(value = "Create Transaction to raise invoice", notes = "Create Transaction to raise invoice")
 		@ApiResponses(value = {
 				@ApiResponse(code = 200, message = "SUCCESS"),
-				@ApiResponse(code = 406, message = "User Profile Can not be created due to server error"),
-				@ApiResponse(code = 409, message = "Payer already have open transactions")
+				@ApiResponse(code = 406, message = "User Transaction can not be created due to server error"),
+				@ApiResponse(code = 409, message = "Payer already have open transactions"),
+				@ApiResponse(code = 412, message = "BVC code is in correct")
 			 })
-	    public TransactionDTO saveUserProfile(@PathVariable Long userId,@RequestBody TransactionDTO txDTO) {
+	    public TransactionDTO saveUserProfile(@PathVariable("userId") Long userId,@RequestBody TransactionDTO txDTO) {
 	      //   empService.saveEmployee(e);
-	    	try{
-	    		
 	    		txDTO = receiverService.createTransaction(txDTO, userId);
 	    		return txDTO;
-	    		
-	    	}catch(Exception e){
-	    		e.printStackTrace();
-				throw new UserCreationException("Unable to create User Profile");
-	    	}   
+	    	
 	    }
 	
 }
