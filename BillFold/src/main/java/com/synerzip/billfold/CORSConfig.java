@@ -1,4 +1,4 @@
-package com.synerzip;
+package com.synerzip.billfold;
 
 
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,7 @@ public class CORSConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+    	http.csrf().disable();
      /*   http.requestMatchers().antMatchers(HttpMethod.OPTIONS, "/oauth/token","/apis/**")
             .and()
                 .csrf().disable()

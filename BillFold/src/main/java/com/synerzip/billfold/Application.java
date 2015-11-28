@@ -1,4 +1,4 @@
-package com.synerzip;
+package com.synerzip.billfold;
 
 
 import javax.sql.DataSource;

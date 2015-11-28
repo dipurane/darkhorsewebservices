@@ -1,4 +1,4 @@
-package com.synerzip;
+package com.synerzip.billfold;
 
 /*
  * Copyright (C) 2015 Paywize. All Rights Reserved.

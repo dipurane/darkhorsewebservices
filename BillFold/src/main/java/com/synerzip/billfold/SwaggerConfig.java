@@ -1,4 +1,4 @@
-package com.synerzip;
+package com.synerzip.billfold;
 
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.models.dto.ApiInfo;
