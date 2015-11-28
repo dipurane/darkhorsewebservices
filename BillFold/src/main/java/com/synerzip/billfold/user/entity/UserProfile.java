@@ -1,12 +1,19 @@
 package com.synerzip.billfold.user.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.synerzip.billfold.stripe.entity.LinkUserBankAccounts;
+import com.synerzip.billfold.stripe.entity.StripeAccount;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -39,15 +46,70 @@ public class UserProfile {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
+	/** The is verified. */
 	@Column(name = "is_verified")
 	private Boolean isVerified;
 	
+	/** The bank accounts. */
+	@OneToMany(mappedBy="userInfo" , cascade = CascadeType.ALL, orphanRemoval = true)    
+	private Set<LinkUserBankAccounts> bankAccounts;
+	
+	/** The stripe account. */
+	@OneToMany(mappedBy="userInfo" , cascade = CascadeType.ALL, orphanRemoval = true)    
+	private Set<StripeAccount> stripeAccount;
+
 	
 	
+	/**
+	 * Gets the bank accounts.
+	 *
+	 * @return the bank accounts
+	 */
+	public Set<LinkUserBankAccounts> getBankAccounts() {
+		return bankAccounts;
+	}
+
+	/**
+	 * Sets the bank accounts.
+	 *
+	 * @param bankAccounts the new bank accounts
+	 */
+	public void setBankAccounts(Set<LinkUserBankAccounts> bankAccounts) {
+		this.bankAccounts = bankAccounts;
+	}
+
+	/**
+	 * Gets the stripe account.
+	 *
+	 * @return the stripe account
+	 */
+	public Set<StripeAccount> getStripeAccount() {
+		return stripeAccount;
+	}
+
+	/**
+	 * Sets the stripe account.
+	 *
+	 * @param stripeAccount the new stripe account
+	 */
+	public void setStripeAccount(Set<StripeAccount> stripeAccount) {
+		this.stripeAccount = stripeAccount;
+	}
+
+	/**
+	 * Gets the checks if is verified.
+	 *
+	 * @return the checks if is verified
+	 */
 	public Boolean getIsVerified() {
 		return isVerified;
 	}
 
+	/**
+	 * Sets the checks if is verified.
+	 *
+	 * @param isVerified the new checks if is verified
+	 */
 	public void setIsVerified(Boolean isVerified) {
 		this.isVerified = isVerified;
 	}
@@ -142,6 +204,9 @@ public class UserProfile {
 		this.lastName = lastName;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -150,6 +215,9 @@ public class UserProfile {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
