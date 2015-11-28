@@ -45,5 +45,5 @@ public interface PayerService {
 	 * @return the transaction dto
 	 */
 	public TransactionDTO processTransaction(Long transactionId,
-			PaymentActionDTO dto, Boolean useProduction);
+			PaymentActionDTO dto);
 }

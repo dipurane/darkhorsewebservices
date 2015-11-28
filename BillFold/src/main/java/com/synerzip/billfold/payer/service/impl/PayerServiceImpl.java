@@ -7,19 +7,6 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -92,6 +79,8 @@ public class PayerServiceImpl implements PayerService{
 		     dto.setId(card.getId());
 		     dto.setLastFourDigits(card.getLastFourDigits());
 		     dto.setCardType(card.getCardType());
+		     dto.setCardId(card.getCardId());
+		     dto.setTokenId(card.getTokenId());
 		     dtoList.add(dto);
 		 }
 		
@@ -115,7 +104,7 @@ public class PayerServiceImpl implements PayerService{
 
 	@Override
 	public TransactionDTO processTransaction(Long transactionId,
-			PaymentActionDTO dto, Boolean useProduction) {
+			PaymentActionDTO dto) {
 		// TODO Auto-generated method stub
 		Transaction tx = txRepo.findOne(transactionId);
 		try {
@@ -132,7 +121,7 @@ public class PayerServiceImpl implements PayerService{
 						Charge c;
 
 						c = stripeUtil.transferFunds(tx, dto, payer, receiver,
-								useProduction);
+								false);
 
 						if (c != null) {
 							tx.setChargeId(c.getId());
