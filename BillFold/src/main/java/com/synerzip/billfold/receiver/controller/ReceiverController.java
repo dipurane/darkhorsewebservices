@@ -42,5 +42,22 @@ public class ReceiverController {
 	    		return txDTO;
 	    	
 	    }
+	 
+	 @RequestMapping(value="transaction/{transactionId}",method = RequestMethod.GET, headers = "Accept=application/json")
+	    @ResponseStatus(HttpStatus.OK)
+	    @ApiOperation(value = "Create Transaction to raise invoice", notes = "Create Transaction to raise invoice")
+		@ApiResponses(value = {
+				@ApiResponse(code = 200, message = "SUCCESS"),
+				@ApiResponse(code = 406, message = "User Transaction can not be created due to server error"),
+				@ApiResponse(code = 409, message = "Payer already have open transactions"),
+				@ApiResponse(code = 412, message = "BVC code is in correct")
+			 })
+	    public TransactionDTO getTransaction(@PathVariable("userId") Long userId,@PathVariable ("transactionId") Long transactionId) {
+	      //   empService.saveEmployee(e);
+	    		return receiverService.getTransactionById(transactionId);
+	    	
+	    }
+	 
+	  
 	
 }

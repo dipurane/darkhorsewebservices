@@ -99,6 +99,7 @@ public class PayerServiceImpl implements PayerService{
 		dto.setDescription(tx.getDescription());
 		dto.setStatus(tx.getStatus());
 		dto.setReceiverPhoneNumber(tx.getReceiverProfile().getPhoneNumber());
+		dto.setId(tx.getId());
 		return dto;
 	}
 

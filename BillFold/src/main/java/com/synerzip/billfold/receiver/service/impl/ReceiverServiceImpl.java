@@ -60,9 +60,19 @@ public class ReceiverServiceImpl implements ReceiverService {
 			 dto.setId(tx.getId());
 			 }else{
 				  throw new PVCCodeMissMatchException("BVC code not matching");
-			 }
+			 }	
 		}
 		
+		return dto;
+	}
+
+	@Override
+	public TransactionDTO getTransactionById(Long transactionId) {
+		// TODO Auto-generated method stub
+		Transaction tx =  transactionRepo.findOne(transactionId);
+		TransactionDTO dto = new TransactionDTO();
+		dto.setId(tx.getId());
+		dto.setStatus(tx.getStatus());
 		return dto;
 	}
 
