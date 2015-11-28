@@ -12,12 +12,17 @@ import org.springframework.stereotype.Component;
 
 import com.synerzip.billfold.payer.dao.repo.PayerVerificationCodeRepository;
 import com.synerzip.billfold.payer.entity.PayerVerificationCode;
+import com.synerzip.billfold.payer.exception.NoPendingTransactionException;
 import com.synerzip.billfold.payer.service.PayerService;
+import com.synerzip.billfold.receiver.dao.repo.TransactionRepository;
+import com.synerzip.billfold.receiver.dto.TransactionDTO;
+import com.synerzip.billfold.receiver.entity.Transaction;
 import com.synerzip.billfold.stripe.dto.CreditCardDTO;
 import com.synerzip.billfold.stripe.entity.StripeAccount;
 import com.synerzip.billfold.stripe.entity.UserCreditCard;
 import com.synerzip.billfold.user.dao.repo.UserProfileRepository;
 import com.synerzip.billfold.user.entity.UserProfile;
+import com.synerzip.billfold.util.BillfoldConstants;
 
 @Component("payerService")
 public class PayerServiceImpl implements PayerService{
@@ -27,6 +32,10 @@ public class PayerServiceImpl implements PayerService{
 	
 	@Autowired
 	private UserProfileRepository userRepo;
+	
+	@Autowired
+	private TransactionRepository txRepo;
+	
 	@Override
 	@Transactional
 	public String generatePVCCode(Long userId) {
@@ -60,6 +69,21 @@ public class PayerServiceImpl implements PayerService{
 		 }
 		
 		return dtoList;
+	}
+
+	@Override
+	public TransactionDTO getOpenTransactionForPayer(Long userId) {
+		// TODO Auto-generated method stub
+		Transaction tx =   txRepo.findOpenTransactionForPayer(userId, BillfoldConstants.TRANSACTION_OPEN);
+		if(tx == null){
+			throw new NoPendingTransactionException("No Pending Transaction");
+		}
+		TransactionDTO dto = new TransactionDTO();
+		dto.setAmount(tx.getAmount());
+		dto.setDescription(tx.getDescription());
+		dto.setStatus(tx.getStatus());
+		dto.setReceiverPhoneNumber(tx.getReceiverProfile().getPhoneNumber());
+		return dto;
 	}
 
 }

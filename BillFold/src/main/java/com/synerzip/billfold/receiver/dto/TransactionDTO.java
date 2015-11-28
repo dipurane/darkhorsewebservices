@@ -27,6 +27,29 @@ public class TransactionDTO {
 	/** The amount. */
 	private Float amount;
 
+	
+	/** The receiver phone number. */
+	private String receiverPhoneNumber;
+	
+	
+	/**
+	 * Gets the receiver phone number.
+	 *
+	 * @return the receiverPhoneNumber
+	 */
+	public String getReceiverPhoneNumber() {
+		return receiverPhoneNumber;
+	}
+
+	/**
+	 * Sets the receiver phone number.
+	 *
+	 * @param receiverPhoneNumber the receiverPhoneNumber to set
+	 */
+	public void setReceiverPhoneNumber(String receiverPhoneNumber) {
+		this.receiverPhoneNumber = receiverPhoneNumber;
+	}
+
 	/**
 	 * Gets the id.
 	 *
