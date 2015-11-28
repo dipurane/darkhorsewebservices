@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,7 @@ public class PaymentGatewayController {
 	@ApiOperation(value = "Register Bank Account for User", notes = "Register Bank Account for User")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "SUCCESS"),
 			@ApiResponse(code = 404, message = "Category Data Not Found"), })
-	public BankAccountDTO registerBankAccount(@RequestParam Long userId,
+	public BankAccountDTO registerBankAccount(@PathVariable Long userId,
 			@RequestBody BankAccountDTO dto) {
 
 		return stripeService.registerBankAccount(dto, userId);
@@ -69,7 +70,7 @@ public class PaymentGatewayController {
 	@ApiOperation(value = "Register Credit Card for User", notes = "Register Credit Card for User")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "SUCCESS"),
 			@ApiResponse(code = 404, message = "Category Data Not Found"), })
-	public CreditCardDTO registerCreditCard(@RequestParam Long userId,
+	public CreditCardDTO registerCreditCard(@PathVariable Long userId,
 			@RequestBody CreditCardDTO dto) {
 
 		return stripeService.registerCreditCard(dto, userId);
@@ -88,7 +89,7 @@ public class PaymentGatewayController {
 	@ApiOperation(value = "Fetch Credit Cards for User", notes = "Fetch Credit Cards for User")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "SUCCESS"),
 			@ApiResponse(code = 404, message = "Credit cards not found"), })
-	public List<CreditCardDTO> getAllCreditCards(@RequestParam Long userId) {
+	public List<CreditCardDTO> getAllCreditCards(@PathVariable Long userId) {
 
 		return payerService.getAllCardsForPayer(userId);
 

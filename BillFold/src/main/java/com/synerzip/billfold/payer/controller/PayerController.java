@@ -54,5 +54,10 @@ public class PayerController {
 		return payerService.getOpenTransactionForPayer(userId);
 
 	}
+	
+	
+	
+	
+	
 
 }

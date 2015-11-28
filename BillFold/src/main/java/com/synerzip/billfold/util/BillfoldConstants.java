@@ -12,5 +12,7 @@ public class BillfoldConstants {
 
 	public final static String TRANSACTION_CLOSED = "CLOSED";
 	
+	public final static String TRANSACTION_ACTION_ACCEPTED = "ACCPTED";
 	
+	public final static String TRANSACTION_ACTION_REJECTED = "REJECTED";
 }

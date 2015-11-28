@@ -20,7 +20,10 @@ import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Account;
+import com.stripe.model.Charge;
 import com.stripe.model.Customer;
+import com.synerzip.billfold.payer.dto.PaymentActionDTO;
+import com.synerzip.billfold.receiver.entity.Transaction;
 import com.synerzip.billfold.stripe.dto.BankAccountDTO;
 import com.synerzip.billfold.stripe.entity.StripeAccount;
 import com.synerzip.billfold.stripe.entity.UserCreditCard;
@@ -163,4 +166,32 @@ public class StripeUtil {
 		return card;
 	}
 
+
+	public  Charge transferFunds(Transaction tx, PaymentActionDTO dto,
+			UserProfile payer, UserProfile receiver, Boolean useProduction)
+			throws AuthenticationException, InvalidRequestException,
+			APIConnectionException, CardException, APIException {
+	
+		if(useProduction){
+			Stripe.apiKey  = stripeLiveKey;
+		}else{
+			Stripe.apiKey  = stripeTestKey;
+		}
+		Map<String, Object> chargeParams = new HashMap<String, Object>();
+		Double amountInCents = new Double((tx.getAmount() * 100));
+
+		chargeParams.put("amount", amountInCents.intValue());
+		chargeParams.put("currency", "usd");
+		chargeParams.put("customer", payer.getStripeAccount().iterator().next().getStripeAccountId());
+		chargeParams.put("source", dto.getCardId());
+		chargeParams.put(
+				"description",
+				"Charge for " + receiver.getPhoneNumber() + " From "
+						+ payer.getPhoneNumber());
+		chargeParams.put("destination", receiver.getBankAccounts().iterator().next().getStripeAccountId());
+		Charge c;
+		c = Charge.create(chargeParams);
+		return c;
+
+	}
 }

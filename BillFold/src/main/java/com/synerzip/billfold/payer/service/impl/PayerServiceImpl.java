@@ -7,11 +7,34 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.stripe.exception.CardException;
+import com.stripe.model.Charge;
 import com.synerzip.billfold.payer.dao.repo.PayerVerificationCodeRepository;
+import com.synerzip.billfold.payer.dto.PaymentActionDTO;
 import com.synerzip.billfold.payer.entity.PayerVerificationCode;
+import com.synerzip.billfold.payer.exception.AccountClosedException;
+import com.synerzip.billfold.payer.exception.AccountFrozenException;
+import com.synerzip.billfold.payer.exception.BankProcessException;
+import com.synerzip.billfold.payer.exception.BillFoldException;
+import com.synerzip.billfold.payer.exception.IncorrectAccountDetailException;
+import com.synerzip.billfold.payer.exception.InsufficientFundException;
+import com.synerzip.billfold.payer.exception.MissingCreditCardException;
 import com.synerzip.billfold.payer.exception.NoPendingTransactionException;
 import com.synerzip.billfold.payer.service.PayerService;
 import com.synerzip.billfold.receiver.dao.repo.TransactionRepository;
@@ -20,6 +43,7 @@ import com.synerzip.billfold.receiver.entity.Transaction;
 import com.synerzip.billfold.stripe.dto.CreditCardDTO;
 import com.synerzip.billfold.stripe.entity.StripeAccount;
 import com.synerzip.billfold.stripe.entity.UserCreditCard;
+import com.synerzip.billfold.stripe.util.StripeUtil;
 import com.synerzip.billfold.user.dao.repo.UserProfileRepository;
 import com.synerzip.billfold.user.entity.UserProfile;
 import com.synerzip.billfold.util.BillfoldConstants;
@@ -35,6 +59,9 @@ public class PayerServiceImpl implements PayerService{
 	
 	@Autowired
 	private TransactionRepository txRepo;
+	
+	@Autowired
+	private StripeUtil stripeUtil;
 	
 	@Override
 	@Transactional
@@ -84,6 +111,78 @@ public class PayerServiceImpl implements PayerService{
 		dto.setStatus(tx.getStatus());
 		dto.setReceiverPhoneNumber(tx.getReceiverProfile().getPhoneNumber());
 		return dto;
+	}
+
+	@Override
+	public TransactionDTO processTransaction(Long transactionId,
+			PaymentActionDTO dto, Boolean useProduction) {
+		// TODO Auto-generated method stub
+		Transaction tx = txRepo.findOne(transactionId);
+		try {
+			UserProfile payer = tx.getPayerProfile();
+			UserProfile receiver = tx.getReceiverProfile();
+			if (dto.getCardId() == null) {
+				throw new MissingCreditCardException();
+			} else {
+				if (BillfoldConstants.TRANSACTION_ACTION_ACCEPTED.equals(dto.getPaymentAction())) {
+					String phoneNumber = tx.getPayerProfile().getPhoneNumber();
+					Float payment = tx.getAmount();
+				
+					
+						Charge c;
+
+						c = stripeUtil.transferFunds(tx, dto, payer, receiver,
+								useProduction);
+
+						if (c != null) {
+							tx.setChargeId(c.getId());
+						}
+						tx.setStatus(BillfoldConstants.TRANSACTION_CLOSED);
+				
+					
+				} else {
+					tx.setStatus(BillfoldConstants.TRANSACTION_ACTION_REJECTED);
+				}
+			}
+			tx = txRepo.save(tx);
+		} catch (CardException ce) {
+			// TODO Auto-generated catch block
+			String errorCode = ce.getCode();
+			if (errorCode != null) {
+				switch (errorCode) {
+				case "insufficient_funds":
+				
+					throw new InsufficientFundException();
+				case "account_closed":
+				
+					throw new AccountClosedException();
+				case "could_not_process":
+				
+					throw new BankProcessException();
+				case "account_frozen":
+				
+					throw new AccountFrozenException();
+				case "no_account":
+				
+					throw new IncorrectAccountDetailException();
+
+				default:
+
+					throw new BillFoldException();
+				}
+
+			}
+		} catch (RuntimeException runEx) {
+			throw runEx;
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			throw new BillFoldException();
+		}
+		TransactionDTO txDTO = new TransactionDTO();
+		txDTO.setId(tx.getId());
+		txDTO.setStatus(tx.getStatus());
+		return txDTO;
 	}
 
 }
