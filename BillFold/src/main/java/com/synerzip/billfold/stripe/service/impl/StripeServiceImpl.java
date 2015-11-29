@@ -78,6 +78,7 @@ public class StripeServiceImpl implements StripeService {
 			UserProfile info = userRepo.findById(userId);
 			List<StripeAccount> accList = new ArrayList<StripeAccount>(
 					info.getStripeAccount());
+			
 			StripeAccount stripeAccount = accList.get(0);
 
 			Set<UserCreditCard> cards = stripeAccount.getCardList();
@@ -88,7 +89,7 @@ public class StripeServiceImpl implements StripeService {
 				cards = new HashSet<UserCreditCard>();
 			}
 			card = stripeUtil.linkCardForStripeCustomer(info, card);
-			stripeAccount.getCardList().clear();
+		//	stripeAccount.getCardList().clear();
 			stripeAccount.getCardList().add(card);
 			info.getStripeAccount().clear();
 			info.getStripeAccount().add(stripeAccount);
