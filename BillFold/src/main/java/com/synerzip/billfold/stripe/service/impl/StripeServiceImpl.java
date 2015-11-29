@@ -49,6 +49,14 @@ public class StripeServiceImpl implements StripeService {
 	public BankAccountDTO registerBankAccount(BankAccountDTO dto, Long userId) {
 		// TODO Auto-generated method stub
 		try {
+			UserProfile profile = userRepo.findById(userId);
+			dto.setLastName(profile.getLastName());
+			dto.setAccountType("sole_prop");
+			dto.setTosAcceptanceIp("121.247.75.143");
+			dto.setFirstName(profile.getFirstName());
+			dto.setEmailAddress(profile.getEmail());
+			
+			
 			String stripeAccId = stripeUtil.createBankAccount(dto);
 			UserProfile info = userRepo.findById(userId);
 			LinkUserBankAccounts account = new LinkUserBankAccounts();
@@ -89,6 +97,7 @@ public class StripeServiceImpl implements StripeService {
 				cards = new HashSet<UserCreditCard>();
 			}
 			card = stripeUtil.linkCardForStripeCustomer(info, card);
+			card.setLastFourDigits(dto.getLastFourDigits());
 		//	stripeAccount.getCardList().clear();
 			stripeAccount.getCardList().add(card);
 			info.getStripeAccount().clear();
