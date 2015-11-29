@@ -1,5 +1,6 @@
 package com.synerzip.billfold.payer.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -173,6 +174,26 @@ public class PayerServiceImpl implements PayerService{
 		txDTO.setId(tx.getId());
 		txDTO.setStatus(tx.getStatus());
 		return txDTO;
+	}
+
+	@Override
+	public List<TransactionDTO> getTransactionList(Long userId) {
+		// TODO Auto-generated method stub
+		UserProfile profile = userRepo.findById(userId);
+		List<Transaction> txList = txRepo.findByPayerProfile(profile);
+		List<TransactionDTO> dtoList = new ArrayList<TransactionDTO>();
+		for (Transaction tx : txList) {
+			TransactionDTO dto = new TransactionDTO();
+			dto.setId(tx.getId());
+			dto.setStatus(tx.getStatus());
+			dto.setReceiverPhoneNumber(tx.getReceiverProfile().getPhoneNumber());
+			dto.setAmount(tx.getAmount());
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			String str = format.format(tx.getCreatedDate());
+			dto.setCreatedDateStr(str);
+			dtoList.add(dto);
+		}
+		return dtoList;
 	}
 
 }

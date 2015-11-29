@@ -26,8 +26,24 @@ public class TransactionDTO {
 	
 	/** The amount. */
 	private Float amount;
-
 	
+	
+	private String createdDateStr;
+	
+	/**
+	 * @return the createdDateStr
+	 */
+	public String getCreatedDateStr() {
+		return createdDateStr;
+	}
+
+	/**
+	 * @param createdDateStr the createdDateStr to set
+	 */
+	public void setCreatedDateStr(String createdDateStr) {
+		this.createdDateStr = createdDateStr;
+	}
+
 	/** The receiver phone number. */
 	private String receiverPhoneNumber;
 	

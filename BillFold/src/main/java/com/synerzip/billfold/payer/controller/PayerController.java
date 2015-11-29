@@ -2,6 +2,8 @@ package com.synerzip.billfold.payer.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -77,6 +79,19 @@ public class PayerController {
 		return payerService.processTransaction(transactionId, paymentAction);
 
 	}
+	
+	@RequestMapping(value="transactionList",method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "GET All Transactions for Receiver", notes = "GET All Transactions for Receiver")
+	@ApiResponses(value = {
+				@ApiResponse(code = 412, message = "BVC code is in correct")
+		 })
+    public List<TransactionDTO> getAllTransactionHistory(@PathVariable("userId") Long userId) {
+      //   empService.saveEmployee(e);
+	 	return payerService.getTransactionList(userId);
+	 
+    }
+	 
 	
 	
 

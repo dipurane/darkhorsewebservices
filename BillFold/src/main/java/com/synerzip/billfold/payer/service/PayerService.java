@@ -41,9 +41,16 @@ public interface PayerService {
 	 *
 	 * @param transactionId the transaction id
 	 * @param dto the dto
-	 * @param useProduction the use production
 	 * @return the transaction dto
 	 */
 	public TransactionDTO processTransaction(Long transactionId,
 			PaymentActionDTO dto);
+	
+	/**
+	 * Gets the transaction list.
+	 *
+	 * @param userId the user id
+	 * @return the transaction list
+	 */
+	public List<TransactionDTO> getTransactionList(Long userId);
 }

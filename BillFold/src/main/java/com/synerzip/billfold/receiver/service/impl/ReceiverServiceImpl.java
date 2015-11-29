@@ -1,6 +1,9 @@
 package com.synerzip.billfold.receiver.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -74,6 +77,26 @@ public class ReceiverServiceImpl implements ReceiverService {
 		dto.setId(tx.getId());
 		dto.setStatus(tx.getStatus());
 		return dto;
+	}
+
+	@Override
+	public List<TransactionDTO> getTransactionList(Long userId) {
+		// TODO Auto-generated method stub
+			UserProfile profile = userProfileRepo.findById(userId);
+			List<Transaction> txList = transactionRepo.findByReceiverProfile(profile);
+			List<TransactionDTO> dtoList = new ArrayList<TransactionDTO>();
+			for (Transaction tx : txList) {
+				TransactionDTO dto = new TransactionDTO();
+				dto.setId(tx.getId());
+				dto.setStatus(tx.getStatus());
+				dto.setPayerPhoneNumber(tx.getPayerProfile().getPhoneNumber());
+				dto.setAmount(tx.getAmount());
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				String str = format.format(tx.getCreatedDate());
+				dto.setCreatedDateStr(str);
+				dtoList.add(dto);
+			}
+			return dtoList;
 	}
 
 	

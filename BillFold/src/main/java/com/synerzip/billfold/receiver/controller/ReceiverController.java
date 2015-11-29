@@ -1,5 +1,7 @@
 package com.synerzip.billfold.receiver.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +43,21 @@ public class ReceiverController {
 	    		txDTO = receiverService.createTransaction(txDTO, userId);
 	    		return txDTO;
 	    	
+	    }
+	 
+	 @RequestMapping(value="transactionList",method = RequestMethod.GET, headers = "Accept=application/json")
+	    @ResponseStatus(HttpStatus.OK)
+	    @ApiOperation(value = "GET All Transactions for Receiver", notes = "GET All Transactions for Receiver")
+		@ApiResponses(value = {
+				@ApiResponse(code = 200, message = "SUCCESS"),
+				@ApiResponse(code = 406, message = "User Transaction can not be created due to server error"),
+				@ApiResponse(code = 409, message = "Payer already have open transactions"),
+				@ApiResponse(code = 412, message = "BVC code is in correct")
+			 })
+	    public List<TransactionDTO> getAllTransactionHistory(@PathVariable("userId") Long userId) {
+	      //   empService.saveEmployee(e);
+		 	return receiverService.getTransactionList(userId);
+		 
 	    }
 	 
 	 @RequestMapping(value="transaction/{transactionId}",method = RequestMethod.GET, headers = "Accept=application/json")
